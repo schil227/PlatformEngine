@@ -1,10 +1,10 @@
 #!/usr/bin/ruby
+require "./Positon"
 require "rubygems"
 require "rubygame"
 include Rubygame
 
 def main
-  @slash = "/"
   @X = 100
   @Y = 100
   @screen = Screen.open [ @X*14, @Y*13]
@@ -14,7 +14,7 @@ def main
 
   @sprites = Sprites::Group.new
   Sprites::UpdateGroup.extend_object @sprites
-  @background = Surface.load "Images" + @slash +"background.jpg"
+  @background = Surface.load "Images/background.jpg"
   @background.blit @screen, [ 0, 0]
 
   @event_queue = EventQueue.new
