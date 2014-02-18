@@ -1,6 +1,4 @@
 require "src/Position"
-
-#gem "minitest"
 require 'test/unit'
 
 class PositionTest < Test::Unit::TestCase
