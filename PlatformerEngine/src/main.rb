@@ -1,5 +1,8 @@
 #!/usr/bin/ruby
-require "./Positon"
+Dir["src/*.rb"].each {|file| 
+  require file
+}
+
 require "rubygems"
 require "rubygame"
 include Rubygame
@@ -19,7 +22,8 @@ def main
 
   @event_queue = EventQueue.new
   @event_queue.enable_new_style_events
-
+  @sprites << Ground.new(40,50,"Images/ground.gif")
+  
   isRunning = true
   while isRunning
     seconds_passed = @clock.tick().seconds

@@ -12,5 +12,4 @@ class Individual < Entity
     @topRightPosn.setPosition(@topRightPosn.x + x, @topRightPosn.y + y)
   end
   
-  
 end
