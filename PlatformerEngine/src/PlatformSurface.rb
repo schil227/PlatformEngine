@@ -1,6 +1,6 @@
 require "src/Entity"
 
-class Surface < Entity
+class PlatformSurface < Entity
   def initialize(topLeftPosn, bottomRightPosn)
     super(topLeftPosn, bottomRightPosn)
   end

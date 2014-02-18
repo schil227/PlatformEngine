@@ -7,7 +7,7 @@
 #}
 require "src/Entity.rb"
 require "src/Individual.rb"
-require "src/Surface.rb"
+require "src/PlatformSurface.rb"
 require "src/Ground.rb"
 require "src/Position.rb"
 
@@ -26,12 +26,12 @@ def main
 
   @sprites = Sprites::Group.new
   Sprites::UpdateGroup.extend_object @sprites
-  @background = Rubygame::Surface.load "Images\background.jpg"
+  @background = Rubygame::Surface.load "Images/background.jpg"
   @background.blit @screen, [ 0, 0]
 
   @event_queue = EventQueue.new
   @event_queue.enable_new_style_events
-  @sprites << Ground.new(40,50,"Images/ground.gif")
+  @sprites << Ground.new(Position.new(50,50),"Images/ground.gif")
   
   isRunning = true
   while isRunning
@@ -39,7 +39,7 @@ def main
     @sprites.undraw @screen, @background
 
     # Give all of the sprites an opportunity to move themselves to a new location
-    @sprites.update  seconds_passed
+   # @sprites.update  seconds_passed
 
     # Draw all of the sprites
     @sprites.draw @screen
