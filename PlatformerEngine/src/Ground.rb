@@ -9,7 +9,7 @@ class Ground < Surface
   def initialize(topLeftPosn, bottomRightPosn, image)
     super(topLeftPosn, bottomRightPosn)
     
-     @image = (Surface.load(image + "1.gif"))
+     @image = (Rubygame::Surface.load(image + "1.gif"))
      @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
      
   end

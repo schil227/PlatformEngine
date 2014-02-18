@@ -1,4 +1,9 @@
+require "rubygame"
+
+include Rubygame
+
 class Entity
+  include Sprites::Sprite
   def initialize(topLeftPosn, bottomRightPosn)
     raise unless (topLeftPosn.is_a?(Position) && bottomRightPosn.is_a?(Position))
     raise if (topLeftPosn.x >= bottomRightPosn.x || topLeftPosn.y >= bottomRightPosn.y)

@@ -1,7 +1,16 @@
 #!/usr/bin/ruby
-Dir["src/*.rb"].each {|file| 
-  require file
-}
+#Dir["src/*.rb"].each {|file| 
+#  if (file != "src/main.rb") 
+#    p("requiring file " + file)
+#    require file
+#  end
+#}
+require "src/Entity.rb"
+require "src/Individual.rb"
+require "src/Surface.rb"
+require "src/Ground.rb"
+require "src/Position.rb"
+
 
 require "rubygems"
 require "rubygame"
@@ -17,7 +26,7 @@ def main
 
   @sprites = Sprites::Group.new
   Sprites::UpdateGroup.extend_object @sprites
-  @background = Surface.load "Images/background.jpg"
+  @background = Rubygame::Surface.load "Images\background.jpg"
   @background.blit @screen, [ 0, 0]
 
   @event_queue = EventQueue.new
