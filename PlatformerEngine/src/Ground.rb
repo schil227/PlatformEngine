@@ -14,6 +14,10 @@ class Ground < PlatformSurface
      
   end
 
+  def update seconds_passed
+    @rect.topleft = self.topLeftPosn.getCord
+  end
+  
   def draw  on_surface
     @image.blit  on_surface, @rect
   end
