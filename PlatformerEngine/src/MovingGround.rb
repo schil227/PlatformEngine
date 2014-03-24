@@ -12,6 +12,7 @@ class MovingGround < Individual
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
     @orientationX = orientationX
     @orientationY = orientationY
+    @cycle = cycle
     @shouldCycle = shouldCycle
     @count = 0
     @goForward = true
@@ -51,6 +52,7 @@ class MovingGround < Individual
       if @goForward
         if (@count < @cycle)
           self.move(@orientationX, @orientationY)
+          @count = @count + 1
         else
           @goForward = false
           @count = 0
@@ -58,6 +60,7 @@ class MovingGround < Individual
       else
         if (@count < @cycle)
           self.move(-1*@orientationX, -1*@orientationY)
+          @count = @count + 1
         else
           @goForward = true
           @count = 0

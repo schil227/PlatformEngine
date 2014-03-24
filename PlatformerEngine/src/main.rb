@@ -33,7 +33,7 @@ def main
   @event_queue = EventQueue.new
   @event_queue.enable_new_style_events
   @sprites << Ground.new(Position.new(50,50),"Images/ground.gif")
-  @sprites << MovingGround.new(Position.new(100,100), "Images/ground.gif", 3, 3, 10, true)
+  @sprites << MovingGround.new(Position.new(100,100), "Images/ground.gif", 16, 16, 10, true)
   isRunning = true
   count = 0
   while isRunning
