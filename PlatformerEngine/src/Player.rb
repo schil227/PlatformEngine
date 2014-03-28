@@ -23,7 +23,7 @@ class Player < Individual
 
   def calcJumpHeight(jumpTime) 
     p("jumpTime: " + jumpTime.to_s)
-    if @jumpSum > 15
+    if @jumpSum > 30
       return 0
     else
       @jumpSum = 15 - 12*jumpTime
