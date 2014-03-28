@@ -30,6 +30,14 @@ class Entity
     end
   end
   
+  def getX()
+    @topLeftPosn.x
+  end
+  
+  def getY()
+      @topLeftPosn.y
+    end
+  
   def getBoxPosn()
     return [@topLeftPosn,@topRightPosn,@bottomLeftPosn,@bottomRightPosn]
   end
