@@ -20,7 +20,7 @@ include Rubygame
 def main
   @X = 100
   @Y = 100
-  @screen = Screen.open [ @X*8, @Y*8]
+  @screen = Screen.open [ @X*8, @Y*6]
   @clock = Clock.new
   @clock.target_framerate = 15
   @clock.enable_tick_events
@@ -34,7 +34,7 @@ def main
   @event_queue.enable_new_style_events
   @sprites << Ground.new(Position.new(50,50),"Images/ground.gif")
   @sprites << MovingGround.new(Position.new(100,100), "Images/ground.gif", 16, 16, 10, true)
-  player = Player.new(Position.new(100,50), "Images/guy.gif")
+  player = Player.new(Position.new(0,500), "Images/guy.gif")
   @sprites <<  player
   isRunning = true
   count = 0
@@ -52,7 +52,7 @@ def main
       when Events::KeyPressed
         if(event.key == :j)
           p("key pressed ")
-          jumpTime += seconds_passed
+          #jumpTime += seconds_passed
           player.jump(jumpTime)
         end
       when Events::KeyReleased

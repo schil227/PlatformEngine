@@ -9,18 +9,24 @@ class Player < Individual
     @image = (Rubygame::Surface.load(image))
     super(topLeftPosn, Position.new(@image.w + topLeftPosn.x, @image.h + topLeftPosn.y))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
+    @jumpSum = 0
+    
+    def self.jumpSum
+      return @jumpSum
+    end
   end
   
   def jump(jumpTime)
-    self.move(self.getX(),self.getY() + calcJumpHeight(jumpTime))
+    self.move(0,-1*calcJumpHeight(jumpTime))
+    p("moved to " + self.topLeftPosn.getCord().to_s)
   end
 
-  def calcJumpHeight(jumpTime)
+  def calcJumpHeight(jumpTime) 
     p("jumpTime: " + jumpTime.to_s)
-    if jumpTime > 1.25
+    if @jumpSum > 15
       return 0
     else
-      return 15 - 12*jumpTime
+      @jumpSum = 15 - 12*jumpTime
     end
   end
   
