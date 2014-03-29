@@ -22,7 +22,7 @@ def main
   @Y = 100
   @screen = Screen.open [ @X*8, @Y*6]
   @clock = Clock.new
-  @clock.target_framerate = 10
+  @clock.target_framerate = 30
   @clock.enable_tick_events
 
   @sprites = Sprites::Group.new
@@ -38,20 +38,22 @@ def main
   @sprites <<  player
   isRunning = true
   count = 0
+  jumpTime=0
   jumpHeld = false
   while isRunning
     count = count + 1
 
-    
-    p("count:"+count.to_s+", jumpHeld:" + jumpHeld.to_s)
+#    p("count:"+count.to_s+", jumpHeld:" + jumpHeld.to_s)
     #jp("count: " + count.to_s)
     seconds_passed = @clock.tick().seconds
     @sprites.undraw @screen, @background
 
     if(jumpHeld)
       p("key held!")
-      #jumpTime += seconds_passed
-      # player.jump(seconds_passed)
+      jumpTime += seconds_passed
+      player.jump(jumpTime)
+    else
+      player.setJumpSum(0)
     end
 
     @event_queue.each do |event|
@@ -62,9 +64,13 @@ def main
         if(event.key == :j)
           jumpHeld = true
         end
+        if(event.key == :r)
+          player.absoluteMove(0,500)
+        end
       when Events::KeyReleased
         if(event.key == :j)
           jumpHeld = false
+          jumpTime = 0
           #player.jumpSum = 0
           # p("player's jumpSum is:" + jumpSum)
         end

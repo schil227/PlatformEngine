@@ -12,6 +12,11 @@ class Individual < Entity
     @topRightPosn.setPosition(@topRightPosn.x + x, @topRightPosn.y + y)
   end
   
-  
+  def absoluteMove(x,y)
+    @bottomLeftPosn.setPosition(x,y)
+       @bottomRightPosn.setPosition(x,y)
+       @topLeftPosn.setPosition(x,y)
+       @topRightPosn.setPosition(x,y)
+  end
   
 end

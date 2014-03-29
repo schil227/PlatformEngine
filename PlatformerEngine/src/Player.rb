@@ -16,17 +16,23 @@ class Player < Individual
     end
   end
   
+  def setJumpSum(sum)
+    @jumpSum = sum
+  end
+  
   def jump(jumpTime)
     self.move(0,-1*calcJumpHeight(jumpTime))
     p("moved to " + self.topLeftPosn.getCord().to_s)
   end
 
   def calcJumpHeight(jumpTime) 
-    p("jumpTime: " + jumpTime.to_s)
-    if @jumpSum > 30
+    p("jumpSum: " + @jumpSum.to_s)
+    calc = (30 - 4*(jumpTime*10)**2)
+    if @jumpSum > 150 || calc <0
       return 0
     else
-      @jumpSum = 15 - 12*jumpTime
+      @jumpSum = @jumpSum + calc
+      return calc
     end
   end
   
