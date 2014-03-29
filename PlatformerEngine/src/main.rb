@@ -22,7 +22,7 @@ def main
   @Y = 100
   @screen = Screen.open [ @X*8, @Y*6]
   @clock = Clock.new
-  @clock.target_framerate = 30
+  @clock.target_framerate = 60
   @clock.enable_tick_events
 
   @sprites = Sprites::Group.new
@@ -38,21 +38,36 @@ def main
   @sprites <<  player
   isRunning = true
   count = 0
-  jumpTime=0
+  jumpTime = 0
+  fallTime = 0
   jumpHeld = false
+  falling = false
   while isRunning
     count = count + 1
 
-#    p("count:"+count.to_s+", jumpHeld:" + jumpHeld.to_s)
+    #    p("count:"+count.to_s+", jumpHeld:" + jumpHeld.to_s)
     #jp("count: " + count.to_s)
     seconds_passed = @clock.tick().seconds
+    p("seconds: " + seconds_passed.to_s)
     @sprites.undraw @screen, @background
 
-    if(jumpHeld)
+    if(jumpHeld && falling == false)
+      fallTime = 0
       p("key held!")
       jumpTime += seconds_passed
+      if(player.calcJumpHeight(jumpTime) == 0)
+        falling = true
+      end
       player.jump(jumpTime)
     else
+      if player.getY() < 500
+        p("falling")
+        fallTime += seconds_passed
+        player.fall(fallTime)
+      else
+        p("falling is false")
+        falling = false
+      end
       player.setJumpSum(0)
     end
 
@@ -63,6 +78,9 @@ def main
       when Events::KeyPressed
         if(event.key == :j)
           jumpHeld = true
+          if(falling == false)
+            player.setCurrentBaseHeight()
+          end
         end
         if(event.key == :r)
           player.absoluteMove(0,500)
@@ -70,6 +88,7 @@ def main
       when Events::KeyReleased
         if(event.key == :j)
           jumpHeld = false
+          falling = true
           jumpTime = 0
           #player.jumpSum = 0
           # p("player's jumpSum is:" + jumpSum)
