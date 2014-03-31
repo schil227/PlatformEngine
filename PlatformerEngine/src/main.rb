@@ -38,6 +38,9 @@ def main
   @sprites <<  player
   isRunning = true
   count = 0
+  leftHeld = false
+  rightHeld = false
+  run = false
   jumpTime = 0
   jumpHeld = false
   isFalling = false
@@ -78,29 +81,55 @@ def main
       end
     end
 
+    if(leftHeld ^ rightHeld) # ^ is xor; a and !b or !a and b
+      if(leftHeld && run)
+        player.walk(1,3)
+      elsif(rightHeld && run) #implied right
+        player.walk(-1,3)
+      elsif(leftHeld)
+        player.walk(1,1)
+      else
+        player.walk(-1,1)
+      end
+    end
+
     @event_queue.each do |event|
       case event
       when Events::QuitRequested
         throw :rubygame_quit
       when Events::KeyPressed
-        if(event.key == :j)
-
+        if(event.key == :space)
           jumpHeld = true
-#          wasJumping = true
           if(isFalling == false)
             player.setCurrentBaseHeight()
           end
           p("key pressed! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
-        end
-        if(event.key == :r)
+
+        elsif(event.key == :r)
           player.absoluteMove(0,500)
+
+        elsif(event.key == :d)
+          leftHeld = true
+
+        elsif(event.key == :a)
+          rightHeld = true
+
+        elsif(event.key == :right_shift  || event.key == :left_shift)
+          run = true
+
         end
       when Events::KeyReleased
-        if(event.key == :j)
+        if(event.key == :space)
           jumpHeld = false
           isFalling = true
           #  falling = true
           p("key released! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
+        elsif(event.key == :d)
+          leftHeld = false
+        elsif(event.key == :a)
+          rightHeld = false
+        elsif(event.key == :right_shift || event.key == :left_shift)
+          run = false
         end
       end
       #      p("in the queue:"+ count.to_s)

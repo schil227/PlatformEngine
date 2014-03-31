@@ -10,12 +10,21 @@ class Player < Individual
     super(topLeftPosn, Position.new(@image.w + topLeftPosn.x, @image.h + topLeftPosn.y))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
     @baseHeight = self.getY()
+    @speed = 3
+    
+    def self.speed
+      return @speed
+    end
     def self.baseHeight
       return @baseHeight
     end
 
   end
 
+  def setSpeed(speed)
+    @speed = speed
+  end
+  
   def jump(jumpTime)
     self.absoluteMove(self.getX(),@baseHeight + -1*calcJumpHeight(jumpTime))
     p("moved to " + self.topLeftPosn.getCord().to_s)
@@ -26,6 +35,10 @@ class Player < Individual
     p("moved to " + self.topLeftPosn.getCord().to_s)
   end
 
+  def walk(direction, acceleration)
+    self.move(speed*direction*acceleration,0)
+  end
+  
   def calcJumpHeight(jumpTime)
     calc = 140*(7*jumpTime + -4*jumpTime**2)
     return calc
