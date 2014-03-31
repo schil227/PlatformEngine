@@ -39,36 +39,43 @@ def main
   isRunning = true
   count = 0
   jumpTime = 0
-  fallTime = 0
   jumpHeld = false
-  falling = false
+  isFalling = false
+  fallTime= 0
   while isRunning
     count = count + 1
 
     #    p("count:"+count.to_s+", jumpHeld:" + jumpHeld.to_s)
     #jp("count: " + count.to_s)
     seconds_passed = @clock.tick().seconds
-    p("seconds: " + seconds_passed.to_s)
+    #p("seconds: " + seconds_passed.to_s)
     @sprites.undraw @screen, @background
 
-    if(jumpHeld && falling == false)
-      fallTime = 0
-      p("key held!")
+    if(jumpHeld && !isFalling )
+      p("baseHeight: " +player.baseHeight.to_s)
+      p("key held! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
       jumpTime += seconds_passed
-      if(player.calcJumpHeight(jumpTime) == 0)
-        falling = true
-      end
-      player.jump(jumpTime)
-    else
-      if player.getY() < 500
-        p("falling")
-        fallTime += seconds_passed
-        player.fall(fallTime)
+      if(player.isFalling(jumpTime))
+        p("negitive velocity")
+        isFalling = true
+        jumpHeld = false
       else
-        p("falling is false")
-        falling = false
+        player.jump(jumpTime)
       end
-      player.setJumpSum(0)
+    elsif( isFalling)
+      if player.getY() < 500
+        p("baseHeight: " +player.baseHeight.to_s)
+        p("falling")
+        jumpTime += seconds_passed
+        fallTime += seconds_passed
+        player.fall(jumpTime, fallTime)
+      else
+        p("baseHeight: " +player.baseHeight.to_s)
+        p("falling is false")
+        jumpTime = 0
+        fallTime = 0
+        isFalling = false
+      end
     end
 
     @event_queue.each do |event|
@@ -77,10 +84,13 @@ def main
         throw :rubygame_quit
       when Events::KeyPressed
         if(event.key == :j)
+
           jumpHeld = true
-          if(falling == false)
+#          wasJumping = true
+          if(isFalling == false)
             player.setCurrentBaseHeight()
           end
+          p("key pressed! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
         end
         if(event.key == :r)
           player.absoluteMove(0,500)
@@ -88,13 +98,12 @@ def main
       when Events::KeyReleased
         if(event.key == :j)
           jumpHeld = false
-          falling = true
-          jumpTime = 0
-          #player.jumpSum = 0
-          # p("player's jumpSum is:" + jumpSum)
+          isFalling = true
+          #  falling = true
+          p("key released! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
         end
       end
-      p("in the queue:"+ count.to_s)
+      #      p("in the queue:"+ count.to_s)
     end
 
     # Give all of the sprites an opportunity to move themselves to a new location
