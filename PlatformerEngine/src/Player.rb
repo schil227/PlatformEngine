@@ -7,15 +7,22 @@ class Player < Individual
   include Sprites::Sprite
   def initialize(topLeftPosn, image)
     @imageName = image
-    @image = (Rubygame::Surface.load("Images/" + @imageName + "Right1.gif"))
+    @direction = "Right"
+    @imageLoadName = "Images/" + @imageName + @direction + "1.gif"
+   
+    @image = (Rubygame::Surface.load(@imageLoadName))
     super(topLeftPosn, Position.new(@image.w + topLeftPosn.x, @image.h + topLeftPosn.y))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
     @baseHeight = self.getY()
-    @speed = 3
-    @directionIsRight = true
+    @speed = 9
+
     @timeSum = 0
-    def self.directionIsRight
-      return @directionIsRight
+    def self.direction
+      return @direction
+    end
+
+    def self.imageLoadName
+      @imageLoadName
     end
 
     def self.speed
@@ -28,8 +35,12 @@ class Player < Individual
 
   end
 
-  def setDirectionIsRight(isRight)
-    @directionIsRight = isRight
+  def DirectionIsRight()
+    return @direction == "Right"
+  end
+
+  def setDirection(direction)
+    @direction = direction
   end
 
   def setSpeed(speed)
@@ -46,15 +57,8 @@ class Player < Individual
     p("moved to " + self.topLeftPosn.getCord().to_s)
   end
 
-  def walk(direction, acceleration)
-    p("speed is:"+ (speed*direction*acceleration).to_s)
-    if(acceleration <= 1)
-      self.move(speed*direction*1,0)
-    elsif acceleration <= 3
-      self.move(speed*direction*acceleration,0)
-    else
-      self.move(speed*direction*3,0)
-    end
+  def walk(direction)
+      self.move(speed*direction,0)
 
   end
 
@@ -78,18 +82,18 @@ class Player < Individual
   end
 
   def changeImageDirection()
-    if(@directionIsRight)
-      @image = (Rubygame::Surface.load("Images/" + @imageName + "Right1.gif"))
-      @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
-    else
-      @image = (Rubygame::Surface.load("Images/" + @imageName + "Left1.gif"))
-      @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
-    end
-
+    p("will be changed to: " + ("Images/" + @imageName + @direction + "1.gif"))
+    @imageLoadName =  "Images/" + @imageName + @direction + "1.gif"
+    p("changed direction: " + @imageLoadName)
+    @image = (Rubygame::Surface.load(@imageLoadName))
+    @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
   end
 
   def update on_surface
-    changeImageDirection()
+    if(/#{@direction}/.match(@imageLoadName) == nil )
+      p("changing Direction!")
+      changeImageDirection()
+    end
     @rect.topleft = self.topLeftPosn.getCord
   end
 

@@ -40,12 +40,10 @@ def main
   count = 0
   leftHeld = false
   rightHeld = false
-  run = false
   jumpTime = 0
   jumpHeld = false
   isFalling = false
   fallTime= 0
-  runTime = 0
   while isRunning
     count = count + 1
 
@@ -83,17 +81,17 @@ def main
     end
 
     if(leftHeld ^ rightHeld) # ^ is xor; a and !b or !a and b
-      p("runTime:" + runTime.to_s)
-      if(leftHeld && run)
-        runTime += seconds_passed
-        player.walk(1,runTime*4)
-      elsif(rightHeld && run) #implied right
-        runTime += seconds_passed
-        player.walk(-1,runTime*4)
-      elsif(leftHeld)
-        player.walk(1,1)
+      if(!jumpHeld && !isFalling)
+        if(leftHeld)
+          player.setDirection("Right")
+        else
+          player.setDirection("Left")
+        end
+      end
+      if(leftHeld)
+        player.walk(1)
       else
-        player.walk(-1,1)
+        player.walk(-1)
       end
     end
 
@@ -114,13 +112,14 @@ def main
 
         elsif(event.key == :d)
           leftHeld = true
-          player.setDirectionIsRight(true)
+          if(!jumpHeld && !isFalling)
+            player.setDirection("Right")
+          end
         elsif(event.key == :a)
           rightHeld = true
-          player.setDirectionIsRight(false)
-        elsif(event.key == :right_shift  || event.key == :left_shift)
-          run = true
-
+          if(!jumpHeld && !isFalling)
+            player.setDirection("Left")
+          end
         end
       when Events::KeyReleased
         if(event.key == :space)
@@ -130,13 +129,8 @@ def main
           p("key released! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
         elsif(event.key == :d)
           leftHeld = false
-          runTime = 0
         elsif(event.key == :a)
           rightHeld = false
-          runTime = 0
-        elsif(event.key == :right_shift || event.key == :left_shift)
-          run = false
-          runTime = 0
         end
       end
       #      p("in the queue:"+ count.to_s)
