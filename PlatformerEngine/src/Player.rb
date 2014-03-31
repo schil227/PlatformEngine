@@ -6,25 +6,36 @@ include Rubygame
 class Player < Individual
   include Sprites::Sprite
   def initialize(topLeftPosn, image)
-    @image = (Rubygame::Surface.load(image))
+    @imageName = image
+    @image = (Rubygame::Surface.load("Images/" + @imageName + "Right1.gif"))
     super(topLeftPosn, Position.new(@image.w + topLeftPosn.x, @image.h + topLeftPosn.y))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
     @baseHeight = self.getY()
     @speed = 3
-    
+    @directionIsRight = true
+    @timeSum = 0
+    def self.directionIsRight
+      return @directionIsRight
+    end
+
     def self.speed
       return @speed
     end
+
     def self.baseHeight
       return @baseHeight
     end
 
   end
 
+  def setDirectionIsRight(isRight)
+    @directionIsRight = isRight
+  end
+
   def setSpeed(speed)
     @speed = speed
   end
-  
+
   def jump(jumpTime)
     self.absoluteMove(self.getX(),@baseHeight + -1*calcJumpHeight(jumpTime))
     p("moved to " + self.topLeftPosn.getCord().to_s)
@@ -36,11 +47,19 @@ class Player < Individual
   end
 
   def walk(direction, acceleration)
-    self.move(speed*direction*acceleration,0)
+    p("speed is:"+ (speed*direction*acceleration).to_s)
+    if(acceleration <= 1)
+      self.move(speed*direction*1,0)
+    elsif acceleration <= 3
+      self.move(speed*direction*acceleration,0)
+    else
+      self.move(speed*direction*3,0)
+    end
+
   end
-  
+
   def calcJumpHeight(jumpTime)
-    calc = 140*(7*jumpTime + -4*jumpTime**2)
+    calc = 140*(7*jumpTime + -4*(jumpTime)**2)
     return calc
   end
 
@@ -58,7 +77,19 @@ class Player < Individual
     @baseHeight = self.getY()
   end
 
+  def changeImageDirection()
+    if(@directionIsRight)
+      @image = (Rubygame::Surface.load("Images/" + @imageName + "Right1.gif"))
+      @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
+    else
+      @image = (Rubygame::Surface.load("Images/" + @imageName + "Left1.gif"))
+      @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
+    end
+
+  end
+
   def update on_surface
+    changeImageDirection()
     @rect.topleft = self.topLeftPosn.getCord
   end
 

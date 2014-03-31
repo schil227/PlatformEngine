@@ -34,7 +34,7 @@ def main
   @event_queue.enable_new_style_events
   @sprites << Ground.new(Position.new(50,50),"Images/ground.gif")
   @sprites << MovingGround.new(Position.new(100,100), "Images/ground.gif", 16, 16, 10, true)
-  player = Player.new(Position.new(0,500), "Images/guy.gif")
+  player = Player.new(Position.new(0,500), "tank")
   @sprites <<  player
   isRunning = true
   count = 0
@@ -45,6 +45,7 @@ def main
   jumpHeld = false
   isFalling = false
   fallTime= 0
+  runTime = 0
   while isRunning
     count = count + 1
 
@@ -82,10 +83,13 @@ def main
     end
 
     if(leftHeld ^ rightHeld) # ^ is xor; a and !b or !a and b
+      p("runTime:" + runTime.to_s)
       if(leftHeld && run)
-        player.walk(1,3)
+        runTime += seconds_passed
+        player.walk(1,runTime*4)
       elsif(rightHeld && run) #implied right
-        player.walk(-1,3)
+        runTime += seconds_passed
+        player.walk(-1,runTime*4)
       elsif(leftHeld)
         player.walk(1,1)
       else
@@ -110,10 +114,10 @@ def main
 
         elsif(event.key == :d)
           leftHeld = true
-
+          player.setDirectionIsRight(true)
         elsif(event.key == :a)
           rightHeld = true
-
+          player.setDirectionIsRight(false)
         elsif(event.key == :right_shift  || event.key == :left_shift)
           run = true
 
@@ -126,10 +130,13 @@ def main
           p("key released! jumpHeld: " + jumpHeld.to_s + ", falling?" + isFalling.to_s)
         elsif(event.key == :d)
           leftHeld = false
+          runTime = 0
         elsif(event.key == :a)
           rightHeld = false
+          runTime = 0
         elsif(event.key == :right_shift || event.key == :left_shift)
           run = false
+          runTime = 0
         end
       end
       #      p("in the queue:"+ count.to_s)
