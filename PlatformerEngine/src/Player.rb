@@ -14,7 +14,7 @@ class Player < Individual
     super(topLeftPosn, Position.new(@image.w + topLeftPosn.x, @image.h + topLeftPosn.y))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
     @baseHeight = self.getY()
-    @speed = 9
+    @speed = 240
 
     @timeSum = 0
     def self.direction
@@ -57,9 +57,8 @@ class Player < Individual
     p("moved to " + self.topLeftPosn.getCord().to_s)
   end
 
-  def walk(direction)
-      self.move(speed*direction,0)
-
+  def walk(direction, timeStep)
+      self.move(speed*direction*timeStep,0)
   end
 
   def calcJumpHeight(jumpTime)
@@ -82,16 +81,13 @@ class Player < Individual
   end
 
   def changeImageDirection()
-    p("will be changed to: " + ("Images/" + @imageName + @direction + "1.gif"))
     @imageLoadName =  "Images/" + @imageName + @direction + "1.gif"
-    p("changed direction: " + @imageLoadName)
     @image = (Rubygame::Surface.load(@imageLoadName))
     @rect  = Rubygame::Rect.new(topLeftPosn.x, topLeftPosn.y, @image.w, @image.h)
   end
 
   def update on_surface
     if(/#{@direction}/.match(@imageLoadName) == nil )
-      p("changing Direction!")
       changeImageDirection()
     end
     @rect.topleft = self.topLeftPosn.getCord

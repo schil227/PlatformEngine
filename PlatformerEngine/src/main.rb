@@ -89,9 +89,9 @@ def main
         end
       end
       if(leftHeld)
-        player.walk(1)
+        player.walk(1, seconds_passed)
       else
-        player.walk(-1)
+        player.walk(-1, seconds_passed)
       end
     end
 
